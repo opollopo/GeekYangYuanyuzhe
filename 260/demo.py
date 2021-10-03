@@ -4,8 +4,10 @@ class Master(object):
 
     def make_cake(self):
         print(self.kongfu + "的方式制作了一个煎饼果子")
+
     def dayandai(self):
         print('大')
+
 
 class School(object):
     def __init__(self):
@@ -13,8 +15,10 @@ class School(object):
 
     def make_cake(self):
         print(self.kongfu + "的方式制作了一个煎饼果子")
+
     def xiaoyandai(self):
         print('小')
+
 
 class Prentice(School, Master):
     def __init__(self):
@@ -30,3 +34,5 @@ if __name__ == '__main__':
     damao.make_cake()
     damao.dayandai()
     damao.xiaoyandai()
+    # 每一个子类都有这个魔法属性，叫做方法查找顺序
+    print(Prentice.__mro__)
