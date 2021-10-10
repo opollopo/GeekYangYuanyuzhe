@@ -5,11 +5,8 @@ class A(object):
         print("init方法,初始话实例属性")
 
     def __new__(cls, *args, **kwargs):
-        if cls.__instance:
-            print("__new__方法，已经创建过一次实例，instance不为None")
-            return cls.__instance
-        print("__new__方法，未创建过实例，instance为None")
-        cls.__instance = object.__new__(cls)
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls)
         return cls.__instance
 
 if __name__ == '__main__':
