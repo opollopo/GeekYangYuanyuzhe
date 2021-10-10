@@ -25,10 +25,12 @@ class Prentice(School, Master):
         self.kongfu = "猫式煎饼果子配方"
 
     def make_cake(self):
+        super().make_cake()
         print(self.kongfu + "的方式制作了一个煎饼果子")
 
 
 if __name__ == '__main__':
+    print(dir())
     damao = Prentice()
     print(damao.kongfu)
     damao.make_cake()
