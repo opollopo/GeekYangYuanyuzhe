@@ -17,9 +17,14 @@ def login():
 def info():
     u = request.form.get("username")
     p = request.form.get("password")
+    a = "登陆成功"
+    if not checkor.pass_lens(p):
+        a = '长度范围8-16'
     if not checkor.pass_char(p):
-        print("至少包含三类字符（数字，字母，特殊字符）")
-    return "登陆成功"
+        a = ("至少包含三类字符（数字，字母，特殊字符）")
+    if not checkor.pass_repeat(p):
+        a = '字符不能连续重复3次及以上'
+    return a
 
 
 if __name__ == '__main__':
