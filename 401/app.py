@@ -2,7 +2,7 @@ import flask
 from flask import request
 import checkor
 
-app = flask.Flask(__name__)
+app = flask.Flask(__name__,static_url_path='')
 
 #路由
 @app.route("/")
@@ -23,4 +23,5 @@ def info():
 
 
 if __name__ == '__main__':
+    print(app.url_map)
     app.run()
