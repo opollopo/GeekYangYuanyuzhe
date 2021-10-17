@@ -14,3 +14,10 @@ def pass_char(p:str):
         else:
             t = 1
     return n+a+t >= 3
+
+def pass_repeat(p:str):
+    for j in p:
+        if p.count(j*3) > 0:
+            return False
+    else:
+        return True
