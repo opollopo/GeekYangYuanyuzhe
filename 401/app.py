@@ -13,7 +13,7 @@ def login():
         <button>登陆</button>
     </form>"""
 
-@app.route("/info")
+@app.route("/info",methods=["post"])
 def info():
     u = request.form.get("username")
     p = request.form.get("password")
