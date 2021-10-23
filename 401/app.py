@@ -1,15 +1,22 @@
 import flask
-from flask import request, render_template
+from flask import request, render_template, session
 import checkor
 
-app = flask.Flask(__name__,static_url_path='')
+app = flask.Flask(__name__, static_url_path='')
+app.secret_key = "fwefewfew16162"
 
-#路由
+
+# 路由
 @app.route("/")
 def login():
-    return render_template("login.html")
+    # session[""]
+    a = session.get("user_info")
+    if not a:
+        return render_template("login.html")
+    return render_template("main.html", asd=a)
 
-@app.route("/info",methods=["post"])
+
+@app.route("/info", methods=["post"])
 def info():
     u = request.form.get("username")
     p = request.form.get("password")
@@ -20,6 +27,8 @@ def info():
     if a:
         return render_template("login.html", msg=a)
     else:
+        # session是一个特殊的字典 {"":"","":""}
+        session["user_info"] = u
         return render_template("main.html", asd=u)
 
 
