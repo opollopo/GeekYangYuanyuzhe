@@ -1,5 +1,5 @@
 import flask
-from flask import request
+from flask import request, render_template
 import checkor
 
 app = flask.Flask(__name__,static_url_path='')
@@ -7,17 +7,23 @@ app = flask.Flask(__name__,static_url_path='')
 #路由
 @app.route("/")
 def login():
-    return """<form action="/info" method="post">
-        用户名：<input type="text" name="username"></br>
-        密 码:<input type="text" name="password"></br>
-        <button>登陆</button>
-    </form>"""
+    return render_template("login.html")
 
 @app.route("/info",methods=["post"])
 def info():
     u = request.form.get("username")
     p = request.form.get("password")
-    a = "登陆成功"
+    # 用户唯一校验
+    a = ""
+    # 密码校验
+    a = pwdCheck(a, p)
+    if a:
+        return render_template("login.html", msg=a)
+    else:
+        return a
+
+
+def pwdCheck(a, p):
     if not checkor.pass_lens(p):
         a = '长度范围8-16'
     if not checkor.pass_char(p):
