@@ -20,7 +20,7 @@ def info():
     if a:
         return render_template("login.html", msg=a)
     else:
-        return a
+        return render_template("main.html", asd=u)
 
 
 def pwdCheck(a, p):
