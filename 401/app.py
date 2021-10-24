@@ -1,5 +1,5 @@
 import flask
-from flask import request, render_template, session
+from flask import request, render_template, session, redirect
 import checkor
 
 app = flask.Flask(__name__, static_url_path='')
@@ -9,6 +9,9 @@ app.secret_key = "fwefewfew16162"
 # 路由
 @app.route("/")
 def login():
+    # 请求上下文中的用户代理，客户段的系统信息
+    print(request.user_agent)
+
     # session[""]
     a = session.get("user_info")
     if not a:
@@ -17,11 +20,14 @@ def login():
 
 @app.route("/ZhuXiao")
 def logout():
-    del session
+    del session["user_info"]
+    print("get请求获得的参数值:"+request.args.get("t"))
     return render_template("login.html")
+
 
 @app.route("/info", methods=["post"])
 def info():
+    # post请求的参数获取方法request.form.get("") ，get 请求获取方式request.args.get("")
     u = request.form.get("username")
     p = request.form.get("password")
     # 用户唯一校验
@@ -34,6 +40,12 @@ def info():
         # session是一个特殊的字典 {"":"","":""}
         session["user_info"] = u
         return render_template("main.html", asd=u)
+
+
+@app.route("/train01")
+def trainInfo():
+    # return redirect("login.html")
+    return redirect("https://www.chntrs.com")
 
 
 def pwdCheck(a, p):
