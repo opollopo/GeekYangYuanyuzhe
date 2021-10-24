@@ -5,7 +5,6 @@ import checkor
 app = flask.Flask(__name__, static_url_path='')
 app.secret_key = "fwefewfew16162"
 
-
 # 路由
 @app.route("/")
 def login():
