@@ -15,6 +15,10 @@ def login():
         return render_template("login.html")
     return render_template("main.html", asd=a)
 
+@app.route("/ZhuXiao")
+def logout():
+    del session
+    return render_template("login.html")
 
 @app.route("/info", methods=["post"])
 def info():
