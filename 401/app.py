@@ -5,6 +5,9 @@ import checkor
 app = flask.Flask(__name__, static_url_path='')
 app.secret_key = "fwefewfew16162"
 
+account = {"yyyz": "123456", "admin": "1qaz@WSX"}
+
+
 # 路由
 @app.route("/")
 def login():
@@ -17,10 +20,11 @@ def login():
         return render_template("login.html")
     return render_template("main.html", asd=a)
 
+
 @app.route("/ZhuXiao")
 def logout():
     del session["user_info"]
-    print("get请求获得的参数值:"+request.args.get("t"))
+    print("get请求获得的参数值:" + request.args.get("t"))
     return render_template("login.html")
 
 
@@ -29,16 +33,24 @@ def info():
     # post请求的参数获取方法request.form.get("") ，get 请求获取方式request.args.get("")
     u = request.form.get("username")
     p = request.form.get("password")
-    # 用户唯一校验
-    a = ""
-    # 密码校验
-    a = pwdCheck(a, p)
-    if a:
-        return render_template("login.html", msg=a)
+    for i, j in account.items():
+        if u == i and p == j:
+            # session是一个特殊的字典 {"":"","":""}
+            session["user_info"] = u
+            return render_template("main.html", asd=u)
     else:
-        # session是一个特殊的字典 {"":"","":""}
-        session["user_info"] = u
-        return render_template("main.html", asd=u)
+        return render_template("login.html", msg="用户名或密码错误")
+
+    # 用户唯一校验
+    # a = ""
+    # 密码校验
+    # a = pwdCheck(a, p)
+    # if a:
+    #     return render_template("login.html", msg=a)
+    # else:
+    #     # session是一个特殊的字典 {"":"","":""}
+    #     session["user_info"] = u
+    #     return render_template("main.html", asd=u)
 
 
 @app.route("/train01")
