@@ -1,11 +1,13 @@
 import flask
 from flask import request, render_template, session, redirect
 import checkor
+import sqlite3
 
 app = flask.Flask(__name__, static_url_path='')
 app.secret_key = "fwefewfew16162"
 
-account = {"yyyz": "123456", "admin": "1qaz@WSX"}
+
+# account = {"yyyz": "123456", "admin": "1qaz@WSX"}
 
 
 # 路由
@@ -24,22 +26,14 @@ def login():
 @app.route("/ZhuXiao")
 def logout():
     del session["user_info"]
-    print("get请求获得的参数值:" + request.args.get("t"))
     return render_template("login.html")
 
 
 @app.route("/info", methods=["post"])
 def info():
-    # post请求的参数获取方法request.form.get("") ，get 请求获取方式request.args.get("")
     u = request.form.get("username")
-    p = request.form.get("password")
-    for i, j in account.items():
-        if u == i and p == j:
-            # session是一个特殊的字典 {"":"","":""}
-            session["user_info"] = u
-            return render_template("main.html", asd=u)
-    else:
-        return render_template("login.html", msg="用户名或密码错误")
+    session["user_info"] = u
+    return render_template("main.html", asd=u)
 
     # 用户唯一校验
     # a = ""
@@ -67,6 +61,47 @@ def pwdCheck(a, p):
     if not checkor.pass_repeat(p):
         a = '字符不能连续重复3次及以上'
     return a
+
+
+cx = None
+cu = None
+
+
+@app.before_first_request
+def conDB():
+    global cx
+    global cu
+    cx = sqlite3.connect("test.db", check_same_thread=False)
+    cu = cx.cursor()
+    # cu.execute("select * from user ")
+    # ret = cu.fetchall()
+    # print(ret)
+
+
+@app.before_request
+def checkUser():
+    global cu
+    # 非根目录访问及注销请求的时候进行用户校验
+    if request.base_url != "http://127.0.0.1:5000/" and request.base_url != "http://127.0.0.1:5000/ZhuXiao":
+        cu.execute("select * from user ")
+        ret = cu.fetchall()
+        username = session.get("user_info")
+        if username:
+            for i in ret:
+                if username == i[1]:
+                    break
+            else:
+                # 用户未找到
+                return render_template("login.html", msg="用户不存在")
+
+        u = request.form.get("username")
+        p = request.form.get("password")
+        if u and p:
+            for i in ret:
+                if u == i[1] and p == i[2]:
+                    break
+            else:
+                return render_template("login.html", msg="用户不存在")
 
 
 if __name__ == '__main__':
