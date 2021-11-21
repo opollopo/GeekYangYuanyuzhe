@@ -64,27 +64,35 @@ def pwdCheck(a, p):
         a = '字符不能连续重复3次及以上'
     return a
 
-@app.route("/create",methods=["post"])
+
+cx = None
+cu = None
+
+
+@app.route("/create", methods=["post"])
 def creat_room():
     """生成目标数字，创建房间号"""
-    room_num = str(random.randint(1, 20))
-    target_num = str(random.randint(1, 200))
-    r_t_n = room_num + " " + target_num
-    room=[]
-    with open("room_tag.txt", "r") as fr:
-        while 1:
-            room_tag_data = fr.readline()
-            if room_tag_data:
-                x, y = room_tag_data.split(" ")
-                room.append([x,y])
-            else:
-                break
-    with open("room_tag.txt", "a") as f:
-        f.write(r_t_n + "\n")
+    room_num = random.randint(1, 20)
+    target_num = random.randint(1, 200)
+    u = request.form.get("username")
+    cu.execute("insert into guess_number ( room, number, people) VALUES (%d, %d, '%s');" % (room_num, target_num, u))
+    cx.commit()
+    # r_t_n = room_num + " " + target_num
+    # room=[]
+    # with open("room_tag.txt", "r") as fr:
+    #     while 1:
+    #         room_tag_data = fr.readline()
+    #         if room_tag_data:
+    #             x, y = room_tag_data.split(" ")
+    #             room.append([x,y])
+    #         else:
+    #             break
+    # with open("room_tag.txt", "a") as f:
+    #     f.write(r_t_n + "\n")
 
     # return "创建的房间号为：%s,生成目标数字是%s" % (room_num, target_num)
     # 返回模板文件一个列表，房间号，目标数字，
-    return render_template("main.html",msg2=room)
+    return render_template("main.html", msg2=[])
 
 
 @app.route("/join", methods=["post"])
@@ -93,7 +101,16 @@ def online_public():
     # 获取房间号
     room_number = request.form.get("room_num")
     cu.execute("select * from guess_number ")
-     a = cu.fetchall()
+    a = cu.fetchall()
+    y = None
+    for i in a:
+        if room_number == i[1]:
+            y = i[2]
+            break
+    else:
+        return render_template("main.html", m="房间号不存在")
+    return render_template("guess.html", v_y=y)
+
     # 判断文件是否存在
     # res = os.path.exists("room_tag.txt")
     # if res:
@@ -110,10 +127,6 @@ def online_public():
     #             return render_template("main.html",m="房间号不存在")
     # else:
     #     return render_template("main.html",m="房间号不存在，请创建房间号")
-
-
-cx = None
-cu = None
 
 
 @app.before_first_request
