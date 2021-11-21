@@ -92,22 +92,24 @@ def online_public():
     """加入房间"""
     # 获取房间号
     room_number = request.form.get("room_num")
+    cu.execute("select * from guess_number ")
+     a = cu.fetchall()
     # 判断文件是否存在
-    res = os.path.exists("room_tag.txt")
-    if res:
-        # 读取room_tag.txt这个文件
-        with open("room_tag.txt", "r") as f:
-            while 1:
-                room_tag_data = f.readline()
-                if room_tag_data:
-                    x, y = room_tag_data.split(" ")
-                    y = y.replace('\n', '')
-                    if room_number == x:
-                        return render_template("guess.html", v_y=y)
-            else:
-                return render_template("main.html",m="房间号不存在")
-    else:
-        return render_template("main.html",m="房间号不存在，请创建房间号")
+    # res = os.path.exists("room_tag.txt")
+    # if res:
+    #     # 读取room_tag.txt这个文件
+    #     with open("room_tag.txt", "r") as f:
+    #         while 1:
+    #             room_tag_data = f.readline()
+    #             if room_tag_data:
+    #                 x, y = room_tag_data.split(" ")
+    #                 y = y.replace('\n', '')
+    #                 if room_number == x:
+    #                     return render_template("guess.html", v_y=y)
+    #         else:
+    #             return render_template("main.html",m="房间号不存在")
+    # else:
+    #     return render_template("main.html",m="房间号不存在，请创建房间号")
 
 
 cx = None
