@@ -77,18 +77,6 @@ def creat_room():
     u = request.form.get("username")
     cu.execute("insert into guess_number ( room, number, people) VALUES (%d, %d, '%s');" % (room_num, target_num, u))
     cx.commit()
-    # r_t_n = room_num + " " + target_num
-    # room=[]
-    # with open("room_tag.txt", "r") as fr:
-    #     while 1:
-    #         room_tag_data = fr.readline()
-    #         if room_tag_data:
-    #             x, y = room_tag_data.split(" ")
-    #             room.append([x,y])
-    #         else:
-    #             break
-    # with open("room_tag.txt", "a") as f:
-    #     f.write(r_t_n + "\n")
 
     # return "创建的房间号为：%s,生成目标数字是%s" % (room_num, target_num)
     # 返回模板文件一个列表，房间号，目标数字，
@@ -111,34 +99,12 @@ def online_public():
         return render_template("main.html", m="房间号不存在")
     return render_template("guess.html", v_y=y)
 
-    # 判断文件是否存在
-    # res = os.path.exists("room_tag.txt")
-    # if res:
-    #     # 读取room_tag.txt这个文件
-    #     with open("room_tag.txt", "r") as f:
-    #         while 1:
-    #             room_tag_data = f.readline()
-    #             if room_tag_data:
-    #                 x, y = room_tag_data.split(" ")
-    #                 y = y.replace('\n', '')
-    #                 if room_number == x:
-    #                     return render_template("guess.html", v_y=y)
-    #         else:
-    #             return render_template("main.html",m="房间号不存在")
-    # else:
-    #     return render_template("main.html",m="房间号不存在，请创建房间号")
-
-
 @app.before_first_request
 def conDB():
     global cx
     global cu
     cx = sqlite3.connect("test.db", check_same_thread=False)
     cu = cx.cursor()
-    # cu.execute("select * from user ")
-    # ret = cu.fetchall()
-    # print(ret)
-
 
 @app.before_request
 def checkUser():
