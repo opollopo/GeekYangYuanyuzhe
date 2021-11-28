@@ -8,7 +8,9 @@ a.debug = True
 
 @a.route("/")
 def login():
-    return render_template("main.html")
+    cu.execute("select * from guess_number ")
+    a = cu.fetchall()
+    return render_template("main.html",msg2=a)
 
 @a.route("/create", methods=["post"])
 def creat_room():
